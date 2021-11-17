@@ -13,7 +13,7 @@ class ItemController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+     public function index()
     {
         return Item::orderBy('created_at', 'DESC')->get();
     }
@@ -23,10 +23,7 @@ class ItemController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
-    }
+    
 
     /**
      * Store a newly created resource in storage.
@@ -49,10 +46,7 @@ class ItemController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        //
-    }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -60,10 +54,7 @@ class ItemController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
-        //
-    }
+    
 
     /**
      * Update the specified resource in storage.
@@ -74,10 +65,10 @@ class ItemController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $existingItem = Item::find( $id );
+        $existingItem = Item::findOrFail( $id );
 
         if($existingItem){
-            $existingItem->completed = $request->item['completed'] ? true : false;
+            $existingItem->completed = (bool)$request->item['completed'];
             $existingItem->completed_at = $request->item['completed'] ? Carbon::now () : null;
             $existingItem->save();
             return $existingItem;
@@ -97,7 +88,9 @@ class ItemController extends Controller
 
         if( $existingItem ) {
             $existingItem->delete();
-            return "Item deleted  succesfully";
         }
+        
+        return "Item deleted  succesfully";
+
     }
 }
